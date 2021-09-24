@@ -23,19 +23,21 @@ const CartContext = createContext<CartContextData>({} as CartContextData);
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const [cart, setCart] = useState<Product[]>(() => {
-    // const storagedCart = Buscar dados do localStorage
+    const storagedCart = localStorage.getItem('@RocketShoes:cart')
 
-    // if (storagedCart) {
-    //   return JSON.parse(storagedCart);
-    // }
-
+    if (storagedCart) {
+      return JSON.parse(storagedCart);
+    }
     return [];
   });
 
+
   const addProduct = async (productId: number) => {
     try {
-      const {data} = await api.get(`/products/${productId}`)
-      localStorage.setItem('@RocketShoes:cart', JSON.stringify(data))
+      const {data} = await api.get(`/products/${productId}`);
+      localStorage.setItem('@RocketShoes:cart', JSON.stringify(data));
+      toast.success('Produto adicionao ao carrinho!')
+      setCart([...cart, data])
     } catch (err){
       toast.error('Erro na adição do produto')
     }
