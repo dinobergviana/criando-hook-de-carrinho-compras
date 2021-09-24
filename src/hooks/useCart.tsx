@@ -34,9 +34,10 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   const addProduct = async (productId: number) => {
     try {
-      // TODO
-    } catch {
-      // TODO
+      const {data} = await api.get(`/products/${productId}`)
+      localStorage.setItem('@RocketShoes:cart', JSON.stringify(data))
+    } catch (err){
+      toast.error('Erro na adição do produto')
     }
   };
 
